@@ -165,7 +165,7 @@ const map = {
     // Отображаем еду.
     foodCell.classList.add('food');
     // Добавляем элемент ячейки еды в массив занятых точек на карте.
-    this.usedCells.push(foodPoint);
+    this.usedCells.push(foodCell);
   },
 };
 
@@ -392,6 +392,8 @@ const game = {
     this.map.init(this.config.getRowsCount(), this.config.getColsCount());
     // Устанавливаем обработчики событий.
     this.setEventHandlers();
+    //инициализируем счетчик очков.
+    this.score.init();
     // Ставим игру в начальное положение.
     this.reset();
   },
@@ -458,6 +460,7 @@ const game = {
     if (this.food.isOnPoint(this.snake.getNextStepHeadPoint())) {
       // Прибавляем к змейке ячейку.
       this.snake.growUp();
+      this.score.increment();
       // Ставим еду в свободную ячейку.
       this.food.setCoordinates(this.getRandomFreeCoordinates());
       // Если выиграли, завершаем игру.
@@ -633,6 +636,26 @@ const game = {
       nextHeadPoint.y < this.config.getRowsCount() &&
       nextHeadPoint.x >= 0 &&
       nextHeadPoint.y >= 0;
+  },
+  score: { //счетчик очков змейки
+    count: null, //количество очков
+    countEl: null, //место для записи очков
+    init(){ //инициализация счетчика
+      this.countEl = document.getElementById('gameScore');
+      this.drop();
+    },
+    drop(){ //обнуление счета
+      this.count = 0;
+      this.countEl.textContent = this.count;
+      this.render();
+    },
+    increment(){ //ведение счета
+      this.count++;
+      this.render();
+    },
+    render(){ //отображение счетчика
+      this.countEl.textContent = this.count;
+    },
   },
 };
 

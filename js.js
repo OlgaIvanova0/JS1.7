@@ -179,6 +179,8 @@ const snake = {
   body: null,
   direction: null,
   lastStepDirection: null,
+  maxX: null,
+  maxY: null,
 
   /**
    * Инициализирует змейку, откуда она будет начинать и ее направление.
@@ -249,19 +251,34 @@ const snake = {
   getNextStepHeadPoint() {
     // Получаем в отдельную переменную голову змейки.
     const firstPoint = this.body[0];
+    this.maxX = settings.colsCount;
+    this.maxY = settings.rowsCount;
     // Возвращаем точку, где окажется голова змейки в зависимости от направления.
     switch (this.direction) {
       case 'up':
+        if(firstPoint.y - 1 < 0){
+          return {x: firstPoint.x, y: this.maxY};
+        };
         return {x: firstPoint.x, y: firstPoint.y - 1};
       case 'right':
+        if(firstPoint.x + 1 > this.maxX) {
+          return {x: 0, y: firstPoint.y};
+        };
         return {x: firstPoint.x + 1, y: firstPoint.y};
       case 'down':
+        if(firstPoint.y + 1 > this.maxY){
+          return {x: firstPoint.x, y: 0};
+        };
         return {x: firstPoint.x, y: firstPoint.y + 1};
       case 'left':
+        if(firstPoint.x - 1 < 0){
+          return {x: this.maxX, y: firstPoint.y};
+        };
         return {x: firstPoint.x - 1, y: firstPoint.y};
-    }
+    };
+    
   },
-
+  
   /**
    * Устанавливает направление змейки.
    * @param {string} direction Направление змейки.
@@ -453,7 +470,7 @@ const game = {
    */
   tickHandler() {
     // Если следующий шаг невозможен, то ставим игру в статус завершенный.
-    if (!this.canMakeStep()) {
+   if (!this.canMakeStep()) {
       return this.finish();
     }
     // Если следующий шаг будет на еду, то заходим в if.
@@ -630,12 +647,14 @@ const game = {
   canMakeStep() {
     // Получаем следующую точку головы змейки в соответствии с текущим направлением.
     const nextHeadPoint = this.snake.getNextStepHeadPoint();
+    
     // Змейка может сделать шаг если следующая точка не на теле змейки и точка внутри игрового поля.
-    return !this.snake.isOnPoint(nextHeadPoint) &&
+    return !this.snake.isOnPoint(nextHeadPoint); 
+    /*&&
       nextHeadPoint.x < this.config.getColsCount() &&
       nextHeadPoint.y < this.config.getRowsCount() &&
       nextHeadPoint.x >= 0 &&
-      nextHeadPoint.y >= 0;
+      nextHeadPoint.y >= 0;*/
   },
   score: { //счетчик очков змейки
     count: null, //количество очков
@@ -657,6 +676,9 @@ const game = {
       this.countEl.textContent = this.count;
     },
   },
+  
+
+
 };
 
 // При загрузке страницы инициализируем игру.

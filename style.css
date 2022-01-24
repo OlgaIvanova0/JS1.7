@@ -51,3 +51,9 @@ td.cell{
     padding: 10px;
     padding-bottom: 0px;
 }
+.work {
+    display: flex;
+    justify-content: center;
+    color: white;
+   
+}

@@ -154,11 +154,14 @@ const map = {
     // Отображаем змейку.
     snakePointsArray.forEach((point, idx) => {
       // Получаем элемент ячейки змейки по точке point.
+      console.log(`x${point.x}_y${point.y}`);
+      if (point.x < settings.colsCount && point.y < settings.rowsCount){
       const snakeCell = this.cells[`x${point.x}_y${point.y}`];
       // Если первый элемент массива, значит это голова, иначе тело.
       snakeCell.classList.add(idx === 0 ? 'snakeHead' : 'snakeBody');
       // Добавляем элемент ячейки змейки в массив занятых точек на карте.
       this.usedCells.push(snakeCell);
+      };
     });
     // Получаем элемент ячейки с едой по точке foodPoint.
     const foodCell = this.cells[`x${foodPoint.x}_y${foodPoint.y}`];
